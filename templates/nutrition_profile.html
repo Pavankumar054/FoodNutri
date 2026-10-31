@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+<div class="app-container">
+    <header class="header">
+        <div class="logo">🥗 FoodNutri</div>
+        <nav>
+            <a href="{{ url_for('home') }}">HOME</a>
+            <a href="{{ url_for('logout') }}">LOGOUT</a>
+        </nav>
+    </header>
+
+    <section class="result-section">
+        <div class="step-number">🎯</div>
+        <h1>Nutrition Profile</h1>
+        <p class="result-subtitle">
+            Enter your details to get your recommended daily nutrition.
+        </p>
+
+        <div class="result-card">
+            <form action="{{ url_for('nutrition_profile') }}" method="POST">
+
+                <label>Age</label>
+                <input type="number" name="age" min="1" max="120"
+                       placeholder="Enter your age" required>
+
+                <label>Weight (kg)</label>
+                <input type="number" name="weight" min="1" max="500"
+                       step="0.1" placeholder="Enter your weight" required>
+
+                <label>Height (cm)</label>
+                <input type="number" name="height" min="50" max="250"
+                       step="0.1" placeholder="Enter your height" required>
+
+                <label>Sex</label>
+                <select name="sex" required>
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <label>Daily Steps</label>
+                <input type="number" name="daily_steps" min="0" max="100000"
+                       step="1" placeholder="Example: 8000" required>
+
+                <small>
+                    Activity estimate: &lt;5000 low, 5000–7499 light,
+                    7500–9999 moderate, 10000–12499 active,
+                    12500+ very active.
+                </small>
+
+                <label>Email Alerts</label>
+                <div style="padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 15px;">
+                    📧 Nutrition alerts will be sent to your registered email address.
+                </div>
+
+                <label>Your Goal</label>
+                <select name="goal" required>
+                    <option value="">Select your goal</option>
+                    <option value="weight_loss">📉 Weight Loss</option>
+                    <option value="balance">⚖️ Weight Balance</option>
+                    <option value="weight_gain">📈 Weight Gain</option>
+                </select>
+
+                <button type="submit" class="analyze-again">
+                    Calculate My Nutrition
+                </button>
+            </form>
+        </div>
+
+        <a href="{{ url_for('home') }}" class="analyze-again">
+            ← Back to Home
+        </a>
+    </section>
+</div>
+</body>
+</html>

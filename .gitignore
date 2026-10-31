@@ -1,0 +1,43 @@
+# Environment & Secrets (NEVER COMMIT)
+.env
+.env.*
+*.env
+
+# SQLite Database (Preserve user privacy and start clean in production)
+*.db
+*.sqlite
+*.sqlite3
+database.db
+
+# Large Training Datasets & Archives (>300MB)
+dataset/
+archive/
+*.zip
+*.tar.gz
+
+# User Uploaded Runtime Images
+uploads/*
+!uploads/.gitkeep
+
+# Python Caches & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+build/
+dist/
+*.egg-info/
+
+# IDE & Editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

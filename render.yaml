@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: foodnutri
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 4 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "False"
+      - key: FOODNUTRI_SMTP_HOST
+        value: smtp.gmail.com
+      - key: FOODNUTRI_SMTP_PORT
+        value: "587"
+      - key: FOODNUTRI_SMTP_USERNAME
+        sync: false
+      - key: FOODNUTRI_SMTP_PASSWORD
+        sync: false
+      - key: FOODNUTRI_FROM_EMAIL
+        sync: false

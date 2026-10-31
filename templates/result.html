@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Analysis Result</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="home-page">
+<div class="app-container">
+<header class="header">
+<div class="logo">🥗 FoodNutri</div>
+<nav>
+<a href="{{ url_for('home') }}">HOME</a>
+<a href="{{ url_for('logout') }}">LOGOUT</a>
+</nav>
+</header>
+
+<section class="result-section">
+<div class="step-number">✓</div>
+<h1>Food Analysis Result</h1>
+<p class="result-subtitle">Your food image has been processed.</p>
+
+<div class="result-image">
+<img src="{{ url_for('static', filename='../uploads/' + image_file) }}" alt="Food image">
+</div>
+
+<div class="result-card">
+<h2>🔍 Detected Food</h2>
+<div class="food-result">{{ food_name }}</div>
+<p class="confidence">Confidence: <strong>{{ confidence }}%</strong></p>
+</div>
+
+<div class="result-card">
+<h2>📷 Image Information</h2>
+<p>Width: {{ width }} pixels</p>
+<p>Height: {{ height }} pixels</p>
+</div>
+
+<div class="result-card nutrition-result">
+<h2>📊 Important Nutrients (per 100 g)</h2>
+<p><strong>Calories:</strong> {{ calories }} kcal</p>
+<p><strong>Protein:</strong> {{ protein }} g</p>
+<p><strong>Carbohydrates:</strong> {{ carbohydrates }} g</p>
+<p><strong>Fat:</strong> {{ fat }} g</p>
+<p><strong>Fiber:</strong> {{ fiber }} g</p>
+</div>
+
+<div class="result-card">
+<h2>📈 Nutrition Chart (per 100 g)</h2>
+<canvas id="nutritionChart"></canvas>
+</div>
+
+<div class="result-card portion-calculator">
+<h2>⚖️ Nutrition Calculator</h2>
+<p>Enter the food weight you actually ate:</p>
+
+<input type="number" id="foodWeight" value="200" min="1" max="10000"
+       step="1" placeholder="Weight in grams">
+<span>grams</span>
+
+<br><br>
+<button type="button" onclick="calculateNutritionByWeight()">Calculate</button>
+
+<div id="calculatedNutrition">
+<h3>📊 Nutrition for <span id="displayWeight">200</span> g</h3>
+<p><strong>Calories:</strong> <span id="calcCalories">--</span> kcal</p>
+<p><strong>Protein:</strong> <span id="calcProtein">--</span> g</p>
+<p><strong>Carbohydrates:</strong> <span id="calcCarbs">--</span> g</p>
+<p><strong>Fat:</strong> <span id="calcFat">--</span> g</p>
+<p><strong>Fiber:</strong> <span id="calcFiber">--</span> g</p>
+
+<br>
+
+<form method="POST" action="{{ url_for('save_analysis') }}" id="saveAnalysisForm">
+<input type="hidden" name="weight" id="saveWeight">
+<input type="hidden" name="food_name" value="{{ food_name }}">
+<input type="hidden" name="confidence" value="{{ confidence }}">
+<input type="hidden" name="calories" id="saveCalories">
+<input type="hidden" name="protein" id="saveProtein">
+<input type="hidden" name="carbohydrates" id="saveCarbs">
+<input type="hidden" name="fat" id="saveFat">
+<input type="hidden" name="fiber" id="saveFiber">
+<button type="submit" class="analyze-btn">➕ Add to Today's Nutrition & Send Email</button>
+</form>
+</div>
+</div>
+
+<a href="{{ url_for('home') }}" class="analyze-again">← Analyze Another Food</a>
+</section>
+</div>
+
+<script>
+const ctx = document.getElementById('nutritionChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Protein', 'Carbohydrates', 'Fat', 'Fiber'],
+        datasets: [{
+            label: 'Nutrients (g)',
+            data: [
+                parseFloat("{{ protein }}"),
+                parseFloat("{{ carbohydrates }}"),
+                parseFloat("{{ fat }}"),
+                parseFloat("{{ fiber }}")
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+function calculateNutritionByWeight() {
+    const weight = parseFloat(document.getElementById('foodWeight').value);
+
+    if (isNaN(weight) || weight <= 0 || weight > 10000) {
+        alert('Please enter a valid food weight.');
+        return;
+    }
+
+    const calories = parseFloat("{{ calories }}");
+    const protein = parseFloat("{{ protein }}");
+    const carbs = parseFloat("{{ carbohydrates }}");
+    const fat = parseFloat("{{ fat }}");
+    const fiber = parseFloat("{{ fiber }}");
+
+    const totalCalories = calories * weight / 100;
+    const totalProtein = protein * weight / 100;
+    const totalCarbs = carbs * weight / 100;
+    const totalFat = fat * weight / 100;
+    const totalFiber = fiber * weight / 100;
+
+    document.getElementById('displayWeight').textContent = weight;
+    document.getElementById('calcCalories').textContent = totalCalories.toFixed(2);
+    document.getElementById('calcProtein').textContent = totalProtein.toFixed(2);
+    document.getElementById('calcCarbs').textContent = totalCarbs.toFixed(2);
+    document.getElementById('calcFat').textContent = totalFat.toFixed(2);
+    document.getElementById('calcFiber').textContent = totalFiber.toFixed(2);
+
+    document.getElementById('saveWeight').value = weight;
+    document.getElementById('saveCalories').value = totalCalories.toFixed(2);
+    document.getElementById('saveProtein').value = totalProtein.toFixed(2);
+    document.getElementById('saveCarbs').value = totalCarbs.toFixed(2);
+    document.getElementById('saveFat').value = totalFat.toFixed(2);
+    document.getElementById('saveFiber').value = totalFiber.toFixed(2);
+}
+
+window.addEventListener('DOMContentLoaded', calculateNutritionByWeight);
+</script>
+</body>
+</html>
