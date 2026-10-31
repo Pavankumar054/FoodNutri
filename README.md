@@ -1,3 +1,13 @@
+---
+title: FoodNutri AI Food Detection
+emoji: 🥗
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # 🥗 FoodNutri – AI-Based Food Detection and Personalized Nutrition Analysis
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
